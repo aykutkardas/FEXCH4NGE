@@ -1,0 +1,47 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    background: #2a363b;
+}
+#board {
+    padding: 0px;
+    border: 2px solid #222020;
+    position: relative;
+    top: 150px;
+    margin: auto;
+    background: #333333;
+}
+.slot {
+    transition: .3s;
+    display: inline-block;
+}
+.item {
+    background-size: cover !important;
+    display: block;
+}
+.g-item0 {
+    background: url(img/g-b-item0.png);
+}
+.g-item1 {
+    background: url(img/g-b-item1.png);
+}
+.g-item2 {
+    background: url(img/g-b-item2.png);
+}
+.g-item3 {
+    background: url(img/g-b-item3.png);
+}
+.g-item4 {
+    background: url(img/g-b-item4.png);
+}
+.g-item5 {
+    background: url(img/g-b-item5.png);
+}
+.g-item6 {
+    background: url(img/g-b-item6.png);
+}
+.g-item7 {
+    background: url(img/g-b-item7.png);
+}
+.g-item8 {
+    background: url(img/g-b-item8.png);
+}
