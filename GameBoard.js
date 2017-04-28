@@ -28,14 +28,14 @@ var GameBoard = function (_MAIN) {
         var x = this.main.Board.x;
         var y = this.main.Board.y;
 
-        for (var i = 0; i < y; i++) {
-            this.grids.horizon[i] = [];
-            this.gridsIndex.horizon[i] = [];
-            for (var k = (i * x); k < ((i * x) + x); k++) {
-                this.grids.horizon[i].push(this.virtualBoard[k]);
-                this.gridsIndex.horizon[i].push(k);
-            }
-        }
+        //        for (var i = 0; i < y; i++) {
+        //            this.grids.horizon[i] = [];
+        //            this.gridsIndex.horizon[i] = [];
+        //            for (var k = (i * x); k < ((i * x) + x); k++) {
+        //                this.grids.horizon[i].push(this.virtualBoard[k]);
+        //                this.gridsIndex.horizon[i].push(k);
+        //            }
+        //        }
 
         for (var i = 0; i < x; i++) {
             this.grids.vertical[i] = [];
@@ -43,6 +43,16 @@ var GameBoard = function (_MAIN) {
             for (var k = i; k < (x * y) + i; k += x) {
                 this.grids.vertical[i].push(this.virtualBoard[k]);
                 this.gridsIndex.vertical[i].push(k);
+            }
+        }
+
+
+        for (var i = 0; i < x; i++) {
+            this.grids.horizon[i] = [];
+            this.gridsIndex.horizon[i] = [];
+            for (var j = 0; j < y; j++) {
+                this.grids.horizon[i][j] = this.grids.vertical[j][i];
+                this.gridsIndex.horizon[i][j] = this.gridsIndex.vertical[j][i];
             }
         }
     }
@@ -105,6 +115,9 @@ var GameBoard = function (_MAIN) {
                 document.querySelector("#s" + this.motionMemory['FIRST_STEP']).appendChild(e.target);
 
                 this.virtualBoardBackUp = this.virtualBoard.concat();
+
+
+                this.main.Control.cleanUndefined();
 
                 // Değilse
             } else {
@@ -206,6 +219,9 @@ var GameBoard = function (_MAIN) {
         this.main.Positioner.createPosition();
         this.syncVirtualBoard();
         this.updateGrids();
+
+        this.main.Control.cleanUndefined();
+
 
     }
 

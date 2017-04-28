@@ -116,5 +116,150 @@ var GameControl = function (_MAIN) {
 
     }
 
+    this.boardAnalyze = function () {
+        this.main.Board.updateGrids();
 
+        var a = this.main.Board.grids.horizon;
+        var aIndex = this.main.Board.gridsIndex.horizon;
+        var horizonDefine = [];
+
+
+        // [NOTE: DONGULER DEĞİŞTİRİLECEK!].
+
+        var boardStatus = false;
+
+        for (var i = 0; i < a.length; i++) {
+            for (j = 0; j < a[i].length; j++) {
+
+                if (a[i][j] == a[i][j + 1] && a[i][j + 1] == a[i][j + 2]) {
+
+                    horizonDefine.push([i, j, j + 1, j + 2]);
+                    boardStatus = true;
+                    this.main.Board.virtualBoard[aIndex[i][j]] = undefined;
+                    this.main.Board.virtualBoard[aIndex[i][j + 1]] = undefined;
+                    this.main.Board.virtualBoard[aIndex[i][j + 2]] = undefined;
+                }
+
+
+            }
+        }
+
+        var b = this.main.Board.grids.vertical;
+        var bIndex = this.main.Board.gridsIndex.vertical;
+
+        var verticalDefine = [];
+        for (var i = 0; i < b.length; i++) {
+
+            for (var j = 0; j < b[i].length; j++) {
+
+
+                if (b[i][j] == b[i][j + 1] && b[i][j + 1] == b[i][j + 2]) {
+                    boardStatus = true;
+                    verticalDefine.push([i, j, j + 1, j + 2]);
+
+                    this.main.Board.virtualBoard[bIndex[i][j]] = undefined;
+                    this.main.Board.virtualBoard[bIndex[i][j + 1]] = undefined;
+                    this.main.Board.virtualBoard[bIndex[i][j + 2]] = undefined;
+                }
+
+            }
+        }
+
+        //        console.log(horizonDefine, this.main.Board.virtualBoard);
+
+
+        this.main.Board.syncRealBoard();
+
+
+        return boardStatus;
+
+    }
+
+    this.frameStorage = [];
+
+    this.isThereEmpty = function () {
+
+        this.main.Board.updateGrids();
+        var tempGrid = [];
+        var emptySlot = 0;
+
+        this.frameStorage.push(this.main.Board.virtualBoard);
+
+        do {
+
+            for (var i = 0; i < this.main.Board.y; i++) {
+
+                for (var k = 0; k < this.main.Board.x; k++) {
+                    if (this.main.Board.grids.horizon[i][k] == undefined) {
+                        this.frameStorage.push(this.main.Board.virtualBoard);
+
+                        if (i == 0) {
+                            var yeni = this.main.Board.itemList.getRand();
+                            this.main.Board.grids.horizon[i][k] = yeni;
+
+                            this.frameStorage.push(this.main.Board.virtualBoard);
+
+                            console.log("İlk satırda bazı elemanlar değiştirildi.");
+                            this.frameStorage.push(this.main.Board.virtualBoard);
+
+                        } else {
+                            this.main.Board.grids.horizon[i][k] = this.main.Board.grids.horizon[i - 1][k];
+                            this.main.Board.grids.horizon[i - 1][k] = undefined;
+
+
+                            this.frameStorage.push(this.main.Board.virtualBoard);
+
+                            console.log("Sonraki satırlarda bazı elemanlar değiştirildi.");
+                            this.frameStorage.push(this.main.Board.virtualBoard);
+
+                        }
+
+                    }
+                }
+
+                //				for (var x = 0; x < this.main.Board.grids.horizon.length; x++) {
+                //					temmpGrid = tempGrid.concat(this.main.Board.grids.horizon[x]);
+                //				}
+                //				this.main.Board.virtualBoard = tempGrid;
+            }
+            for (var q = 0; q < this.main.Board.grids.horizon.length; q++) {
+
+
+                if (this.main.Board.grids.horizon[q].count()[undefined] > 0) {
+                    console.log('Tahtada boş alanlar bulundu.');
+                    emptySlot = 1;
+                    break;
+                } else {
+                    var horizonRow = this.main.Board.grids.horizon;
+                    var tempHorizon = [];
+                    for (var l = 0; l < horizonRow.length; l++) {
+                        tempHorizon = tempHorizon.concat(horizonRow[l]);
+                    }
+
+                    this.main.Board.virtualBoard = tempHorizon;
+
+                    this.main.Board.virtualBoardBackUp = this.main.Board.virtualBoard.concat();
+                    emptySlot = 0;
+
+                }
+
+            }
+        } while (emptySlot != 0);
+        //		console.log("this.main.Board.virtualBoard");
+        //		console.log(this.main.Board.virtualBoard);
+
+        this.main.Board.syncRealBoard();
+    }
+
+
+    this.cleanUndefined = function () {
+
+
+        do {
+
+            this.isThereEmpty();
+        }
+        while (this.boardAnalyze() === true);
+
+    }
 }
