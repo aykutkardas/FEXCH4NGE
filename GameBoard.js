@@ -92,6 +92,9 @@ var GameBoard = function (_MAIN) {
         this.motionMemory['SECOND_STEP'] = targetPos;
 
 
+
+        // [ HATA: 1 (Aşağı taşınacak.)]
+
         // Sanal tahtadaki 2. adımın yerindeki classa 1. adımdaki classı yazar.
         this.virtualBoard[this.motionMemory['SECOND_STEP']] = this.virtualBoardBackUp[this.motionMemory['FIRST_STEP']];
 
@@ -114,10 +117,12 @@ var GameBoard = function (_MAIN) {
 
                 document.querySelector("#s" + this.motionMemory['FIRST_STEP']).appendChild(e.target);
 
-                this.virtualBoardBackUp = this.virtualBoard.concat();
+
 
 
                 this.main.Control.cleanUndefined();
+
+                this.virtualBoardBackUp = this.virtualBoard.concat();
 
                 // Değilse
             } else {
@@ -225,5 +230,21 @@ var GameBoard = function (_MAIN) {
 
     }
 
+
+    this.updateVirtualBoard = function () {
+        var a = this.gridsIndex['horizon'];
+
+        for (var i = 0; i < a.length; i++) {
+            for (j = 0; j < a[i].length; j++) {
+
+                this.main.Board.virtualBoard[a[i][j]] = this.grids['horizon'][i][j];
+
+
+
+            }
+        }
+
+        this.virtualBoardBackUp = this.virtualBoard.concat();
+    }
 
 }

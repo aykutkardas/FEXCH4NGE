@@ -2,6 +2,12 @@ body {
     font-family: "Open Sans", sans-serif;
     background: #2a363b;
 }
+
+.Projection-Board > div {
+  position: fixed;
+  top: 0px; left: 0px;
+  //border: 1px solid white;
+}
 #board {
     padding: 0px;
     border: 2px solid #222020;

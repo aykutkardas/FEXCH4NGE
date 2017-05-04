@@ -117,11 +117,11 @@ var GameControl = function (_MAIN) {
     }
 
     this.boardAnalyze = function () {
+
         this.main.Board.updateGrids();
 
         var a = this.main.Board.grids.horizon;
         var aIndex = this.main.Board.gridsIndex.horizon;
-        var horizonDefine = [];
 
 
         // [NOTE: DONGULER DEĞİŞTİRİLECEK!].
@@ -133,7 +133,7 @@ var GameControl = function (_MAIN) {
 
                 if (a[i][j] == a[i][j + 1] && a[i][j + 1] == a[i][j + 2]) {
 
-                    horizonDefine.push([i, j, j + 1, j + 2]);
+
                     boardStatus = true;
                     this.main.Board.virtualBoard[aIndex[i][j]] = undefined;
                     this.main.Board.virtualBoard[aIndex[i][j + 1]] = undefined;
@@ -147,7 +147,7 @@ var GameControl = function (_MAIN) {
         var b = this.main.Board.grids.vertical;
         var bIndex = this.main.Board.gridsIndex.vertical;
 
-        var verticalDefine = [];
+
         for (var i = 0; i < b.length; i++) {
 
             for (var j = 0; j < b[i].length; j++) {
@@ -155,7 +155,7 @@ var GameControl = function (_MAIN) {
 
                 if (b[i][j] == b[i][j + 1] && b[i][j + 1] == b[i][j + 2]) {
                     boardStatus = true;
-                    verticalDefine.push([i, j, j + 1, j + 2]);
+
 
                     this.main.Board.virtualBoard[bIndex[i][j]] = undefined;
                     this.main.Board.virtualBoard[bIndex[i][j + 1]] = undefined;
@@ -165,13 +165,18 @@ var GameControl = function (_MAIN) {
             }
         }
 
-        //        console.log(horizonDefine, this.main.Board.virtualBoard);
+
 
 
         this.main.Board.syncRealBoard();
 
+        if(boardStatus) {
+          this.frameStorage.push(this.main.Board.virtualBoard);
+        }
 
         return boardStatus;
+
+
 
     }
 
@@ -180,10 +185,10 @@ var GameControl = function (_MAIN) {
     this.isThereEmpty = function () {
 
         this.main.Board.updateGrids();
-        var tempGrid = [];
+        //        var tempGrid = [];
         var emptySlot = 0;
 
-        this.frameStorage.push(this.main.Board.virtualBoard);
+
 
         do {
 
@@ -191,28 +196,32 @@ var GameControl = function (_MAIN) {
 
                 for (var k = 0; k < this.main.Board.x; k++) {
                     if (this.main.Board.grids.horizon[i][k] == undefined) {
-                        this.frameStorage.push(this.main.Board.virtualBoard);
-
                         if (i == 0) {
+
                             var yeni = this.main.Board.itemList.getRand();
                             this.main.Board.grids.horizon[i][k] = yeni;
 
-                            this.frameStorage.push(this.main.Board.virtualBoard);
+                            // this.main.Board.updateVirtualBoard();
+
 
                             console.log("İlk satırda bazı elemanlar değiştirildi.");
-                            this.frameStorage.push(this.main.Board.virtualBoard);
+
 
                         } else {
                             this.main.Board.grids.horizon[i][k] = this.main.Board.grids.horizon[i - 1][k];
                             this.main.Board.grids.horizon[i - 1][k] = undefined;
 
+                            // this.main.Board.updateVirtualBoard();
 
-                            this.frameStorage.push(this.main.Board.virtualBoard);
 
                             console.log("Sonraki satırlarda bazı elemanlar değiştirildi.");
-                            this.frameStorage.push(this.main.Board.virtualBoard);
 
                         }
+
+                        this.main.Board.updateVirtualBoard();
+                        this.frameStorage.push(this.main.Board.virtualBoard);
+
+
 
                     }
                 }
@@ -222,10 +231,13 @@ var GameControl = function (_MAIN) {
                 //				}
                 //				this.main.Board.virtualBoard = tempGrid;
             }
+
+
             for (var q = 0; q < this.main.Board.grids.horizon.length; q++) {
 
 
                 if (this.main.Board.grids.horizon[q].count()[undefined] > 0) {
+
                     console.log('Tahtada boş alanlar bulundu.');
                     emptySlot = 1;
                     break;
@@ -241,9 +253,12 @@ var GameControl = function (_MAIN) {
                     this.main.Board.virtualBoardBackUp = this.main.Board.virtualBoard.concat();
                     emptySlot = 0;
 
+
                 }
 
             }
+
+
         } while (emptySlot != 0);
         //		console.log("this.main.Board.virtualBoard");
         //		console.log(this.main.Board.virtualBoard);
@@ -253,13 +268,12 @@ var GameControl = function (_MAIN) {
 
 
     this.cleanUndefined = function () {
+        this.frameStorage.push(this.main.Board.virtualBoard);
 
-
-        do {
-
+        // [! HATA : 2]
+        while (this.boardAnalyze() === true) {
             this.isThereEmpty();
-        }
-        while (this.boardAnalyze() === true);
+        };
 
     }
 }
