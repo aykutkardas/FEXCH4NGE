@@ -237,13 +237,11 @@ var GameBoard = function (_MAIN) {
         for (var i = 0; i < a.length; i++) {
             for (j = 0; j < a[i].length; j++) {
 
-                this.main.Board.virtualBoard[a[i][j]] = this.grids['horizon'][i][j];
-
-
+                this.virtualBoard[a[i][j]] = this.grids.horizon[i][j];
 
             }
         }
-
+        
         this.virtualBoardBackUp = this.virtualBoard.concat();
     }
 

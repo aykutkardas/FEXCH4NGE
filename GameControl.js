@@ -204,7 +204,6 @@ var GameControl = function (_MAIN) {
                             // this.main.Board.updateVirtualBoard();
 
 
-                            console.log("İlk satırda bazı elemanlar değiştirildi.");
 
 
                         } else {
@@ -214,14 +213,10 @@ var GameControl = function (_MAIN) {
                             // this.main.Board.updateVirtualBoard();
 
 
-                            console.log("Sonraki satırlarda bazı elemanlar değiştirildi.");
-
                         }
 
                         this.main.Board.updateVirtualBoard();
                         this.frameStorage.push(this.main.Board.virtualBoard);
-
-
 
                     }
                 }
@@ -237,11 +232,10 @@ var GameControl = function (_MAIN) {
 
 
                 if (this.main.Board.grids.horizon[q].count()[undefined] > 0) {
-
-                    console.log('Tahtada boş alanlar bulundu.');
                     emptySlot = 1;
                     break;
                 } else {
+
                     var horizonRow = this.main.Board.grids.horizon;
                     var tempHorizon = [];
                     for (var l = 0; l < horizonRow.length; l++) {
@@ -250,6 +244,8 @@ var GameControl = function (_MAIN) {
 
                     this.main.Board.virtualBoard = tempHorizon;
 
+
+                    // this.main.Board.updateVirtualBoard();
                     this.main.Board.virtualBoardBackUp = this.main.Board.virtualBoard.concat();
                     emptySlot = 0;
 
@@ -260,20 +256,25 @@ var GameControl = function (_MAIN) {
 
 
         } while (emptySlot != 0);
-        //		console.log("this.main.Board.virtualBoard");
-        //		console.log(this.main.Board.virtualBoard);
 
         this.main.Board.syncRealBoard();
     }
 
-
     this.cleanUndefined = function () {
         this.frameStorage.push(this.main.Board.virtualBoard);
 
-        // [! HATA : 2]
         while (this.boardAnalyze() === true) {
             this.isThereEmpty();
         };
+
+        for(var i = 0; i < this.frameStorage.length; i++){
+
+          if(this.frameStorage[i] === this.frameStorage[i+1]){
+          	this.frameStorage.splice(i,1);
+          }
+
+        }
+
 
     }
 }

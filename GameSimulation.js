@@ -9,9 +9,10 @@ function GameSimulation(_MAIN) {
     if(this.framePage < this.main.Control.frameStorage.length) {
 
       this.projection();
-      this.framePage += speed || 1;
+      _('.Projection-Page').html(this.framePage+'/'+this.main.Control.frameStorage.length-1);
+      ++this.framePage;
 
-      setTimeout('app.Simulation.playRecord('+speed+','+loop+');', 50);
+      setTimeout('app.Simulation.playRecord('+speed+','+loop+');', 500);
     } else {
       if(true === loop){
         this.framePage = 0;

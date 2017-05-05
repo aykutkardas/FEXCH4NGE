@@ -6,11 +6,11 @@ app.Control = new GameControl(app);
 app.Positioner = new GamePositioner(app);
 app.Simulation = new GameSimulation(app);
 
+
 Board = app.Board;
 Control = app.Control;
 Positioner = app.Positioner;
 Simulation = app.Simulation;
-
 
 Board.createBoard({
     x: 6,
